@@ -1,13 +1,14 @@
 # agent_core/llm/ollama.py
 from __future__ import annotations
 import json
+import os
 import urllib.request
 import uuid
 
 from ..models import AgentMessage, LLMResponse, ToolCall, ToolResult, ToolSchema
 from .base import LLMProvider
 
-DEFAULT_BASE_URL = "http://localhost:11434"
+DEFAULT_BASE_URL = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
 
 
 class OllamaProvider(LLMProvider):
