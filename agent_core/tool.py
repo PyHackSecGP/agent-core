@@ -23,6 +23,8 @@ class ToolDefinition:
     def call(self, arguments: dict[str, Any]) -> str:
         """Execute the tool function and return JSON-serialised result."""
         result = self.fn(**arguments)
+        if isinstance(result, str):
+            return result
         return json.dumps(result, default=str)
 
 
