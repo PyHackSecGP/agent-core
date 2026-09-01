@@ -28,7 +28,7 @@ def main() -> None:
     """Run the toy agent smoke test."""
     provider = get_provider(
         provider=os.environ.get("AGENT_PROVIDER", "ollama"),
-        model=os.environ.get("AGENT_MODEL", "hermes3:70b"),
+        model=os.environ.get("AGENT_MODEL", ""),
     )
     registry = ToolRegistry([add, multiply])
 

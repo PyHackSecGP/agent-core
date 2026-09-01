@@ -16,12 +16,17 @@ class ClaudeProvider(LLMProvider):
 
     def chat(self, messages: list[AgentMessage], tools: list[ToolSchema]) -> LLMResponse:
         """Send messages to Claude and return the response."""
-        response = self._client.messages.create(
+        system = next((m.content for m in messages if m.role == "system"), "")
+        non_system = [m for m in messages if m.role != "system"]
+        kwargs: dict = dict(
             model=self.model,
             max_tokens=self.max_tokens,
-            messages=[_to_msg(m) for m in messages],
+            messages=[_to_msg(m) for m in non_system],
             tools=[_to_tool(t) for t in tools],
         )
+        if system:
+            kwargs["system"] = system
+        response = self._client.messages.create(**kwargs)
         tool_calls: list[ToolCall] = []
         content = ""
         for block in response.content:
